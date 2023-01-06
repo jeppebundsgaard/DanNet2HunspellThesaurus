@@ -20,6 +20,8 @@ Data layout of the files `.dat` and `.idx` are explained in the file `data_layou
 ## Include in LibreOffice OXT-files
 Unpack the .oxt-file (it is a zip-archive), add or replace the two thesaurus files: `th_da_DK.dat` and `th_da_DK.idx`. Zip it back again.
 
+The `da_DK incl dannet thesaurus.oxt` file in the root folder has the latest thesaurus integrated. Install it in LibreOffice.
+
 ## Author
 Jeppe Bundsgaard, jeppe@bundsgaard.net.
 
