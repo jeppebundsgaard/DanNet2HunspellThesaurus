@@ -9,7 +9,8 @@ Project page: https://cst.ku.dk/projekter/dannet/.
 The CSV-files from DanNet is available in the DanNet-2.2-folder.
 
 ## Scripts in this repository
-The file `dannet.sql` consists of the database structure. Import it into a database `dannet`. Create the user `dannet` and give it access to read and write in the database. Put the password in the file .passw in the root folder.
+The file `dannet.sql` consists of the database structure. Import it into a database `dannet`. It is *VERY* important that it has the right collation (character set), e.g. utf8mb4_da_0900_as_ci for Danish case insensitive. 
+Create the user `dannet` and give it access to read and write in the database. Put the password in the file .passw in the root folder.
 
 The file `importdannet.php` imports the DanNet csv-files (converted manually to utf-8 to avoid csv-problems). See the script for a few tweaks.
 
