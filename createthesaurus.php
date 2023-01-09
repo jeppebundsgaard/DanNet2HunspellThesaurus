@@ -49,7 +49,11 @@ while($w=$r->fetch_assoc()) {
 	select 
 		concat_ws("|",
 			concat("(",ELT(FIELD(pos,"Adjective","Noun","Verb"),"tillægsord","navneord","verbum"),") "'.
-				', SUBSTRING(REPLACE(REGEXP_SUBSTR(s.gloss,".*?(\\\\.\\\\.\\\\.|\\\\()"),"(",""),1,30)'.
+				', SUBSTRING(
+						REPLACE(
+							 IF(REGEXP_LIKE(s.gloss,".*?(\\\\.\\\\.\\\\.|\\\\()"),REGEXP_SUBSTR(s.gloss,".*?(\\\\.\\\\.\\\\.|\\\\()"),s.gloss),
+							"(",""),
+					1,30)'. // In this part the explanation of the synonym's synset is explained in short (max 30 characters).
 			'),
 			group_concat(DISTINCT CONCAT(w.form,
 				concat(
@@ -66,7 +70,6 @@ while($w=$r->fetch_assoc()) {
 		('.$w["synsets"].') or ws.synset_id IN ('.$w["similarsynsets"].') or ws.synset_id IN ('.$w["oversynsets"].') or ws.synset_id IN ('.$w["undersynsets"].')) GROUP BY ws.synset_id ORDER BY FIELD(ws.synset_id,'.$w["synsets"].','.$w["similarsynsets"].','.$w["oversynsets"].','.$w["undersynsets"].')';
 		
 		// Synonyms will sometimes have another definition than the main word. Tried to show the main definition, but not the word itself (otherwise the word would be synonym for itself), but that will leave a number of empty lines:
-		// if(w.form LIKE "'.$w["form"].'","",)
 		
 		
 	try {
@@ -82,7 +85,7 @@ while($w=$r->fetch_assoc()) {
 		if($row["syns"]=="") break;
 		if($first) { // The first row is the word and info
 			$first=false;
-			$word=$w["form"];
+			$word=strtolower($w["form"]); // All words need to be lowercase, otherwise you will get strange results.
 			$bytepos=mb_strlen($dat, '8bit');
 			$idx.=$word."|".$bytepos."\n"; // The .idx consist of a word and it's byte-position
 			$dat.=$word."|".$r1->num_rows."\n"; //The word and the number of meanings
@@ -92,4 +95,4 @@ while($w=$r->fetch_assoc()) {
 }
 file_put_contents($outfiles.".dat",$dat);
 file_put_contents($outfiles.".idx",$idx);
-echo "Done\n".$dat." \n\nAnd\n".$idx;
+echo "Done\n";//.$dat." \n\nAnd\n".$idx;

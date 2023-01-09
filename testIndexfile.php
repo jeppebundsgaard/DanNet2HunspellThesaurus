@@ -10,7 +10,7 @@ foreach($idx as $i) {
 	if($id[1]) {
 		fseek($handle, $id[1]);
 		$next = fread($handle, 100);
-		echo "<br><b>".$id[0].":</b> ".$next;
+		echo "\n<br><b>".$id[0].":</b> ".$next;
 		// if($id[1]>10000000) exit;
 	}
 }
